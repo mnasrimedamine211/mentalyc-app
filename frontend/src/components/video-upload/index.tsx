@@ -79,13 +79,24 @@ const VideoUploadComponent = () => {
         }, 1000);
       } else {
         setCapturing(false);
+        setStartRecord(false);
+        setVideoUrl("");
         setVideoError("Webcam stream not available.");
       }
     } else {
       setCapturing(false);
+      setStartRecord(false);
+      setVideoUrl("");
       setVideoError("Webcam reference not available.");
     }
-  }, [webcamRef, setCapturing, mediaRecorderRef, handleDataAvailable]);
+  }, [
+    webcamRef,
+    setCapturing,
+    mediaRecorderRef,
+    handleDataAvailable,
+    setStartRecord,
+    setVideoError,
+  ]);
 
   const handleStopCaptureClick = useCallback(() => {
     const mediaRecorder: any = mediaRecorderRef.current;
