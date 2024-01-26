@@ -1,8 +1,11 @@
 import React, { ChangeEvent, useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import "./videoUpload.css";
+import axios from "axios";
+import AlertMessageComponent from "../alerts";
+
 function VideoUploadComponent() {
-  const [videoFile, setVideoFile] = useState(null);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState("");
   const [videoError, setVideoError] = useState("");
   const [startRecord, setStartRecord] = useState(false);
@@ -10,7 +13,17 @@ function VideoUploadComponent() {
   const mediaRecorderRef = useRef(null);
   const [capturing, setCapturing] = useState(false);
   const [recordedChunks, setRecordedChunks] = useState([]);
+  const [openAlert, setOpenAlert] = useState<{
+    type: string;
+    message: string;
+  } | null>(null);
+  const showAlertComponent = (type: string, message: string) => {
+    setOpenAlert({ type, message });
+  };
 
+  const closeAlertComponent = () => {
+    setOpenAlert(null);
+  };
   const handleDataAvailable = useCallback(
     ({ data }: any) => {
       if (data.size > 0) {
@@ -38,6 +51,17 @@ function VideoUploadComponent() {
         );
         //@ts-ignore
         mediaRecorderRef.current.start();
+
+        const maxRecordingTime = 60 * 60 * 1000;
+        let elapsedTime = 0;
+
+        const intervalId = setInterval(() => {
+          elapsedTime += 1000;
+          if (elapsedTime >= maxRecordingTime) {
+            clearInterval(intervalId);
+            handleStopCaptureClick();
+          }
+        }, 1000);
       } else {
         setCapturing(false);
         setVideoError("Webcam stream not available.");
@@ -58,32 +82,54 @@ function VideoUploadComponent() {
     }
   }, [mediaRecorderRef, setCapturing]);
 
-  const handleDownload = useCallback(() => {
+  const handleUpload = useCallback(() => {
     if (recordedChunks.length) {
       const blob = new Blob(recordedChunks, {
         type: "video/mp4",
       });
-      const url = URL.createObjectURL(blob);
+      const randomNum = Math.floor(Math.random() * 1000) + 1;
+      const videoName = `video(${randomNum}).mp4`;
+      const formData = new FormData();
+      formData.append("file", blob, videoName);
+      let alertMessage = null;
+      axios
+        .post("http://localhost:3006/upload", formData)
+        .then((response) => {
+          if (response && response.data) {
+            alertMessage = {
+              type: "success",
+              message: "Operation successful",
+            };
+            showAlertComponent(alertMessage.type, alertMessage.message);
+          }
+        })
+        .catch((error) => {
+          alertMessage = {
+            type: "error",
+            message: "Operation successful",
+          };
+          showAlertComponent(alertMessage.type, alertMessage.message);
+        });
+      /*    const url = URL.createObjectURL(blob);
       const a: any = document.createElement("a");
       document.body.appendChild(a);
       a.style = "display: none";
       a.href = url;
-      a.download = "react-webcam-stream-capture.mp4";
+      a.download = videoName;
       a.click();
-      window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(url); */
       setRecordedChunks([]);
     }
   }, [recordedChunks]);
 
   const videoConstraints = {
-    width: 420,
-    height: 420,
+    width: 400,
+    height: 300,
     facingMode: "user",
   };
 
-  const handleVideoChange = (event: any) => {
-   
-    const file = event.target.files[0];
+  const handleVideoChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       if (file.type.endsWith("mp4")) {
         setVideoFile(file);
@@ -100,27 +146,31 @@ function VideoUploadComponent() {
   const startRecordingVideo = () => {
     setStartRecord(true);
   };
+
   return (
     <div className="video-upload">
       <div className="video-placeholder">
         {startRecord ? (
-          <div className="Container">
+          <div className="">
             <Webcam
-              height={400}
-              width={300}
-              audio={false}
+              height={300}
+              width={400}
+              audio={true}
               mirrored={true}
               ref={webcamRef}
               videoConstraints={videoConstraints}
             />
-            {capturing ? (
-              <button onClick={handleStopCaptureClick}>Stop Capture</button>
-            ) : (
-              <button onClick={handleStartCaptureClick}>Start Capture</button>
-            )}
-            {recordedChunks.length > 0 && (
-              <button onClick={handleDownload}>Download</button>
-            )}
+            <div className="buttons-action">
+              {capturing ? (
+                <button onClick={handleStopCaptureClick}>Stop Capture</button>
+              ) : (
+                <button onClick={handleStartCaptureClick}>Start Capture</button>
+              )}
+
+              {recordedChunks.length > 0 && (
+                <button onClick={handleUpload}>Upload video</button>
+              )}
+            </div>
           </div>
         ) : videoUrl ? (
           <video width="400" height="300" controls>
@@ -142,14 +192,28 @@ function VideoUploadComponent() {
         />
         <div className="video-icon">
           <label htmlFor="video-input">
-            <i className="fas fa-camera icon" onClick={() => {setStartRecord(false)}}></i>
+            <i
+              className="fas fa-camera icon"
+              onClick={() => {
+                setStartRecord(false);
+              }}
+            ></i>
           </label>
 
           <i onClick={startRecordingVideo} className="fas fa-video icon"></i>
         </div>
       </div>
       {videoError && <span style={{ color: "red" }}>{videoError}</span>}
+
+      {openAlert && (
+        <AlertMessageComponent
+          type={openAlert.type}
+          message={openAlert.message}
+          onClose={closeAlertComponent}
+        />
+      )}
     </div>
   );
 }
+
 export default VideoUploadComponent;

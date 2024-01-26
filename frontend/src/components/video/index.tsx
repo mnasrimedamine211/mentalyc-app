@@ -25,17 +25,19 @@ export default function VideoComponent({ videoItem }: IProps) {
     }
   }, []);
 
-  const handleLoadedMetadata = (
-    event: React.SyntheticEvent<HTMLVideoElement>
-  ) => {
-    const duration = (event.target as HTMLVideoElement).duration;
-    let timeOfVideo = "";
-    if (duration && !isNaN(duration)) {
-      const minutes = Math.floor(duration / 60);
-      const seconds = Math.floor(duration % 60);
-      timeOfVideo = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  const handlePlay = () => {
+    const videoElement = document.getElementById('video-play') as HTMLVideoElement;
+
+    if (videoElement) {
+      const duration = videoElement.duration;
+
+      if (!isNaN(duration)) {
+        const minutes = Math.floor(duration / 60);
+        const seconds = Math.floor(duration % 60);
+        const formattedDuration = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        setVideoDuration(formattedDuration);
+      }
     }
-    setVideoDuration(timeOfVideo);
   };
   return (
     <div className="video">
@@ -44,7 +46,9 @@ export default function VideoComponent({ videoItem }: IProps) {
         <video
           controls
           className="video-content"
-          onLoadedMetadata={handleLoadedMetadata}
+          onPlay={handlePlay}
+          id='video-play'
+
         >
           <source src={apiUrl + videoItem} type="video/mp4" />
         </video>

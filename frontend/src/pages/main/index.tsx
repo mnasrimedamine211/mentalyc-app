@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import './main.css'
 import Header from "../../components/header";
 import Home from "../home";
 import AddVideo from "../addVideo";
