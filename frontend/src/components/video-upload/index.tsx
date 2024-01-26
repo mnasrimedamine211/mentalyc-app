@@ -1,17 +1,11 @@
-import React, {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import axios from "axios";
 import AlertMessageComponent from "../alerts";
 import "./videoUpload.css";
-import { useNavigate } from "react-router-dom";
 
 const VideoUploadComponent = () => {
+  const [recordingTime, setRecordingTime] = useState(0);
   const [processing, setProcessing] = useState(false);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState("");
@@ -48,13 +42,13 @@ const VideoUploadComponent = () => {
   );
 
   const handleStartCaptureClick = useCallback(() => {
-    setCapturing(true);
     const webcam: any = webcamRef.current;
 
     if (webcam) {
       const stream = webcam.stream;
 
       if (stream) {
+        setCapturing(true);
         mediaRecorderRef.current = new MediaRecorder(stream, {
           mimeType: "video/webm",
         });
@@ -71,7 +65,7 @@ const VideoUploadComponent = () => {
 
         const intervalId = setInterval(() => {
           elapsedTime += 1000;
-
+          setRecordingTime(elapsedTime / 1000);
           if (elapsedTime >= maxRecordingTime) {
             clearInterval(intervalId);
             handleStopCaptureClick();
@@ -213,7 +207,16 @@ const VideoUploadComponent = () => {
 
   return (
     <div className="video-upload">
-      <h1 className="title">Record or import your video </h1>
+      <div className="title-container">
+        {!capturing ? (
+          <h1 className="title">Record or import your video</h1>
+        ) : (
+          <span className="title recording">
+            Recording {recordingTime + " s"}{" "}
+          </span>
+        )}
+       
+      </div>
       <div className="video-placeholder">
         {startRecord ? (
           <div className="video-container">

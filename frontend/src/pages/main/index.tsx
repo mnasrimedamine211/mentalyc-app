@@ -11,7 +11,6 @@ function Main() {
       <div
         id="main"
         className="main"
-   
       >
         <Header />
         <Routes>

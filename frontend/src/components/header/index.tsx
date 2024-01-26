@@ -4,7 +4,7 @@ import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import "./header.css";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation  } from "react-router-dom";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -37,9 +37,11 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 function Header() {
 
-  const [activeSearch, setActiveSearch] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
+  const location = useLocation();
+
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -58,9 +60,6 @@ function Header() {
     navigate("/addVideo");
   };
 
-  
- 
-
   return (
     <div className="header" id="header">
       <div className="badge" onClick={navigateToHome}>
@@ -69,18 +68,23 @@ function Header() {
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           variant="dot"
         >
-          <Avatar src="/static/icon/mentalyc_logo.svg" style={{cursor: 'pointer'}} />
+          <Avatar
+            src="/static/icon/mentalyc_logo.svg"
+            style={{ cursor: "pointer" }}
+          />
         </StyledBadge>
         <h3 className="title"> Mentalyc</h3>
       </div>
       <div className="header-action">
-        <button className="add-button" onClick={navigateToAddVideo}>
-          <i className="fas fa-plus icons" ></i>
-          <span
-            className={
-               windowWidth > 767 ? "" : "close-add-button"
-            }
-          >
+        <button className={location.pathname !== '/' ? "add-button" :'active-button'} onClick={navigateToHome}>
+          <i className="fas fa-arrow-left icons"></i>
+          <span className={windowWidth > 767 ? "" : "close-add-button"}>
+            Home
+          </span>
+        </button>
+        <button className={location.pathname !== '/addVideo' ? "add-button" :'active-button'} onClick={navigateToAddVideo}>
+          <i className="fas fa-plus icons"></i>
+          <span className={windowWidth > 767 ? "" : "close-add-button"}>
             Add video
           </span>
         </button>

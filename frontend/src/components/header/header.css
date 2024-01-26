@@ -30,34 +30,12 @@
   gap: 5px;
 }
 
-.header .header-action .search-container {
-  display: flex;
-  align-items: center;
-  height: 25px;
-  
-}
 
-.header .header-action .search-container .search-input {
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
-  border: 1px solid #d4f4dd;
-  border-radius: 15px 0 0 15px;
-  font-size: 16px;
-  outline: none;
-  height: 25px;
-}
 
-.header .header-action .search-container .search-icon {
-  background-color: #d4f4dd;
-  color: #4b1d3f;
-  border: none;
-  border-radius: 0 15px 15px 0;
-  cursor: pointer;
-  height: 25px;
-}
+
+
 .header .header-action .add-button {
-  border: 1px solid #d4f4dd;
+  border: 1px solid #d62246;
   border-radius: 15px;
   cursor: pointer;
   height: 30px;
@@ -67,6 +45,33 @@
   gap: 10px;
   width: 120px;
 }
+
+.header .header-action .active-button {
+  border: none;
+  background: #d62246;
+  border-radius: 15px;
+  cursor: not-allowed;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+
+}
+.header .header-action .active-button > span {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 300;
+  font-size: 0.75rem;
+  line-height: 1.66;
+  letter-spacing: 0.03333em;
+  color: rgb(244, 226, 226);
+}
+.header .header-action .active-button > i {
+  font-size: 0.75rem;
+  color: rgb(244, 226, 226);
+}
+
 .header .header-action .add-button > span {
   color: #d62246;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
