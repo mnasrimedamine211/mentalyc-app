@@ -28,10 +28,15 @@ const upload = multer({ storage: storage });
 
 // Set up a route for file uploads
 app.post('/upload', upload.single('file'), (req, res) => {
-    // Handle the uploaded file
-    res.json({ message: 'File uploaded successfully!' });
-});
-
+    try {
+      // If you reach this point, the file upload was successful
+      res.json({ message: 'File uploaded successfully!' });
+    } catch (error) {
+  
+      res.status(500).json({ error: 'Error uploading file' });
+    }
+  });
+  
 // New route to get the list of uploaded videos
 app.get('/videos', (req, res) => {
     fs.readdir(uploadDirectory, (err, files) => {

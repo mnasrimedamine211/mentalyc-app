@@ -151,6 +151,17 @@ const VideoUploadComponent = () => {
     facingMode: "user",
   };
 
+ const  formatRecordTime = (seconds : number ) : string => {
+  
+    var minutes = Math.floor(seconds / 60);
+    var remainingSeconds = seconds % 60;
+    var formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+    var formattedSeconds = remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds;
+    var formattedTime = formattedMinutes + ":" + formattedSeconds;
+    return formattedTime;
+}
+
+
   const handleVideoChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     setVideoFile(null);
@@ -212,7 +223,7 @@ const VideoUploadComponent = () => {
           <h1 className="title">Record or import your video</h1>
         ) : (
           <span className="title recording">
-            Recording {recordingTime + " s"}{" "}
+            Recording {formatRecordTime(recordingTime)}{" "}
           </span>
         )}
        
