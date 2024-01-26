@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./video.css";
 import { VideoType } from "../../utils/interfaces/interfaces";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 interface IProps {
   videoItem: string;
 }
@@ -10,7 +10,8 @@ export default function VideoComponent({ videoItem }: IProps) {
   const [videoDuration, setVideoDuration] = useState("");
   const [title, setTitle] = useState("");
   const [dataOfCreation, setDateOfCreation] = useState("");
-
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   useEffect(() => {
     if (videoItem) {
       const match = videoItem.match(/^(\d+)-(.+)\.mp4$/);
@@ -38,12 +39,7 @@ export default function VideoComponent({ videoItem }: IProps) {
     event: React.SyntheticEvent<HTMLVideoElement>
   ) => {
     const duration = (event.target as HTMLVideoElement).duration;
-    console.log(
-      duration,
-      Number.isFinite(duration),
-      duration,
-      !isNaN(duration)
-    );
+   
     let timeOfVideo = "";
     if (Number.isFinite(duration) && duration && !isNaN(duration)) {
       const minutes = Math.floor(duration / 60);
@@ -56,7 +52,11 @@ export default function VideoComponent({ videoItem }: IProps) {
     <div className="video">
       <Box
         key={videoItem}
-        sx={{ width: 400, height: 300, position: "relative" }}
+        sx={{
+          width: isSmallScreen ? "100%" : 400,
+          height: isSmallScreen ? "100%" : 300,
+          position: "relative",
+        }}
       >
         <button className="time"> {videoDuration}</button>
 

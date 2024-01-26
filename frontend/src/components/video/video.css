@@ -4,6 +4,7 @@
   padding: 5px;
   border-radius: 25px;
   transition: box-shadow 0.3s ease; 
+ 
 }
 .video:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.6); 
@@ -25,3 +26,9 @@
   transform: translateY(-50%);
 }
 
+@media (max-width <= 400px){
+  .video {
+    width: 100%;
+    height: 100%;
+  }
+}
