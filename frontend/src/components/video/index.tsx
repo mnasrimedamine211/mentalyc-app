@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./video.css";
-import { VideoType } from "../../utils/interfaces/interfaces";
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 interface IProps {
   videoItem: string;
@@ -33,7 +32,7 @@ export default function VideoComponent({ videoItem }: IProps) {
         setDateOfCreation(formattedDate.toString());
       }
     }
-  }, []);
+  }, [videoItem]);
 
   const handleLoadedMetadata = (
     event: React.SyntheticEvent<HTMLVideoElement>
