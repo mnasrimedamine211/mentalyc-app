@@ -1,46 +1,110 @@
-
 .alert {
-    padding: 15px;
-    margin: 10px 0;
-    border: 1px solid;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 15px;
+  margin: 10px 0;
+  border: 1px solid;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  bottom: 30px;
+  left: 20px;
+  width: auto;
+  min-width: 300px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4)
+}
+
+.alert .message-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+}
+
+.alert span {
+  flex-grow: 1;
+}
+
+.alert-success {
+  color: #3c763d;
+  background-color: white;
+  border: none;
+}
+
+.alert-error {
+  color: #a94442;
+  background-color: white;
+  border: none;
+
+}
+
+.close {
+  cursor: pointer;
+  background: none;
+  border: 0;
+  font-size: 18px;
+  color: inherit;
+}
+
+@media (max-width : 400px) {
+  .alert {
+    width: 100%;
+    min-width: 100%;
     position: absolute;
     bottom: 0;
     left: 0;
-    width: auto;
-    min-width: 300px;
-   
   }
-  
-  .alert span {
-    flex-grow: 1;
+}
+
+
+
+.tick {
+  stroke-dasharray: 29px;
+  stroke-dashoffset: 29px;
+  animation: draw .5s cubic-bezier(.25, .25, .25, 1) forwards;
+  animation-delay: .6s
+}
+
+.circle {
+  fill-opacity: 0;
+  stroke-width: 16px;
+  transform-origin: center;
+  transform: scale(0);
+  animation: grow 1s cubic-bezier(.25, .25, .25, 1.25) forwards;
+}
+
+@keyframes grow {
+  60% {
+    transform: scale(.8);
+    stroke-width: 4px;
+    fill-opacity: 0;
   }
-  
-  .alert-success {
-    color: #3c763d;
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
+
+  100% {
+    transform: scale(.9);
+    stroke-width: 8px;
+    fill-opacity: 1;
+
   }
-  
-  .alert-error {
-    color: #a94442;
-    background-color: #f2dede;
-    border-color: #ebccd1;
+}
+
+@keyframes draw {
+  100% {
+    stroke-dashoffset: 0;
   }
-  
-  .close {
-    cursor: pointer;
-    background: none;
-    border: 0;
-    font-size: 18px;
-    color: inherit;
-  }
-  @media (max-width : 400px) {
-    .alert {
-      width: auto;
-      min-width: 100%
-    }
-  }
+}
+
+
+
+
+
+
+
+
+
+
+.svg-container {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}

@@ -1,8 +1,8 @@
 .home {
   position: relative;
+  min-height: calc(100vh - 50px);
   width: 100%;
   height: 100%;
-  margin-top: 50px;
   padding: 5% 0;
 }
 .home .no-data {
@@ -16,7 +16,7 @@
     flex-wrap: wrap;
     justify-content:space-around;
     word-wrap: break-word;
-    gap: 10px;
+    gap: 20px;
 }
 .home .home-container .empty-videos {
     width: 350px;

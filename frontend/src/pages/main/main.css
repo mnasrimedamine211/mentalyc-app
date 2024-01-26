@@ -1,6 +1,7 @@
 .main {
-  position: relative;
-  height: 100vh;
+  position: absolute;
+  min-height: calc(100vh - 50px);
   width: 100%;
   background-color: rgba(244, 226, 226, 0.4);
+  margin-top: 50px;
 }

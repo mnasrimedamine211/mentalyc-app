@@ -59,10 +59,7 @@ function Header() {
   };
 
   
-  const openSearch = () => {
-    setActiveSearch(!activeSearch);
-
-  };
+ 
 
   return (
     <div className="header" id="header">

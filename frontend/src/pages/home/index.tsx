@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./home.css";
-
-import { VideoType } from "../../utils/interfaces/interfaces";
 import VideoComponent from "../../components/video";
 import { Skeleton, Box } from "@mui/material";
 import axios from "axios";
@@ -9,6 +7,17 @@ import axios from "axios";
 function Home() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const videoRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      const videoWidth = videoRef.current.clientWidth;
+      const emptyVideos = document.querySelectorAll(".empty-videos");
+      emptyVideos.forEach((emptyVideo) => {
+        (emptyVideo as HTMLDivElement).style.width = `${videoWidth}px`;
+      });
+    }
+  }, [videos]);
   // first Render of page
   useEffect(() => {
     axios
@@ -66,7 +75,7 @@ function Home() {
         <div className="home-container">
           {videos &&
             videos.map((video: string, index: number) => (
-              <div key={index}>
+              <div key={index} id="video" ref={videoRef}>
                 <VideoComponent videoItem={video} />
               </div>
             ))}
